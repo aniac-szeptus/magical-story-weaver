@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      favorite_stories: {
+        Row: {
+          age: string | null
+          child_name: string
+          created_at: string
+          duration: string | null
+          gender: string | null
+          id: string
+          moral: string | null
+          moral_category: string | null
+          story_text: string
+          topic: string
+          topic_category: string | null
+          user_id: string
+        }
+        Insert: {
+          age?: string | null
+          child_name: string
+          created_at?: string
+          duration?: string | null
+          gender?: string | null
+          id?: string
+          moral?: string | null
+          moral_category?: string | null
+          story_text: string
+          topic: string
+          topic_category?: string | null
+          user_id: string
+        }
+        Update: {
+          age?: string | null
+          child_name?: string
+          created_at?: string
+          duration?: string | null
+          gender?: string | null
+          id?: string
+          moral?: string | null
+          moral_category?: string | null
+          story_text?: string
+          topic?: string
+          topic_category?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

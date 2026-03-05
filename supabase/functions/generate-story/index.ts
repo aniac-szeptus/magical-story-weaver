@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { name, age, gender, topic, topic_category, moral, moral_category, duration } = await req.json();
+    const { name, age, gender, topic, topic_category, moral, moral_category, duration, continuation } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
@@ -47,10 +47,17 @@ WAŻNE ZASADY:
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          {
-            role: "user",
-            content: `Napisz bajkę dla ${isBoy ? "chłopca" : "dziewczynki"} o imieniu ${name} (${age} lat). Temat: ${topic}. Morał: ${moral}. Długość: około ${wordCount} słów.`,
-          },
+          ...(continuation
+            ? [
+                { role: "assistant", content: continuation },
+                { role: "user", content: `Napisz ciąg dalszy tej bajki. Kontynuuj fabułę, dodaj nowe przygody dla ${name}. Długość: około ${wordCount} słów. Zakończ emoji: 🌟 Koniec 🌟` },
+              ]
+            : [
+                {
+                  role: "user",
+                  content: `Napisz bajkę dla ${isBoy ? "chłopca" : "dziewczynki"} o imieniu ${name} (${age} lat). Temat: ${topic}. Morał: ${moral}. Długość: około ${wordCount} słów.`,
+                },
+              ]),
         ],
       }),
     });
