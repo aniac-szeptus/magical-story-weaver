@@ -39,23 +39,27 @@ interface TopicSelectorProps {
 
 const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [randomMode, setRandomMode] = useState<"full" | string | null>(null);
 
   const toggleCategory = (name: string) => {
     setExpandedCategory((prev) => (prev === name ? null : name));
   };
 
   const selectTopic = (category: string, topic: string) => {
+    setRandomMode(null);
     onChange({ category, topic });
   };
 
   const selectRandomFromCategory = (cat: TopicCategory) => {
     const random = cat.topics[Math.floor(Math.random() * cat.topics.length)];
+    setRandomMode(cat.name);
     onChange({ category: cat.name, topic: random });
   };
 
   const selectFullyRandom = () => {
     const cat = TOPIC_CATEGORIES[Math.floor(Math.random() * TOPIC_CATEGORIES.length)];
     const topic = cat.topics[Math.floor(Math.random() * cat.topics.length)];
+    setRandomMode("full");
     onChange({ category: cat.name, topic });
   };
 
@@ -69,7 +73,9 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
         onClick={selectFullyRandom}
         className={cn(
           "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
-          "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+          randomMode === "full"
+            ? "bg-primary/20 border-primary text-foreground shadow-[0_0_12px_-3px_hsl(var(--primary)/0.4)]"
+            : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
         )}
       >
         <Shuffle className="h-4 w-4" />
@@ -84,14 +90,14 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
               "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
               expandedCategory === cat.name
                 ? "bg-secondary/60 border-primary/40 text-foreground"
-                : value?.category === cat.name
+                : value?.category === cat.name && !randomMode
                 ? "bg-primary/10 border-primary text-foreground shadow-[0_0_12px_-3px_hsl(var(--primary)/0.4)]"
                 : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/30"
             )}
           >
             <span className="text-base">{cat.emoji}</span>
             <span className="flex-1 text-left">{cat.name}</span>
-            {value?.category === cat.name && (
+            {value?.category === cat.name && !randomMode && (
               <span className="text-xs text-primary truncate max-w-[120px]">
                 {value.topic}
               </span>
@@ -116,7 +122,12 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
                 <div className="flex flex-wrap gap-1.5 px-2 py-2">
                   <button
                     onClick={() => selectRandomFromCategory(cat)}
-                    className="px-3 py-1.5 rounded-full text-xs transition-all border bg-secondary/40 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs transition-all border",
+                      randomMode === cat.name
+                        ? "bg-primary/20 border-primary text-foreground shadow-[0_0_10px_-2px_hsl(var(--primary)/0.5)]"
+                        : "bg-secondary/40 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                    )}
                   >
                     🎲 Losowy
                   </button>

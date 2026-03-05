@@ -47,6 +47,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [customMoral, setCustomMoral] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const [randomMode, setRandomMode] = useState<"full" | string | null>(null);
 
   const toggleCategory = (name: string) => {
     setExpandedCategory((prev) => (prev === name ? null : name));
@@ -54,17 +55,20 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
   };
 
   const selectMoral = (category: string, moral: string) => {
+    setRandomMode(null);
     onChange({ category, moral });
   };
 
   const selectRandomFromCategory = (cat: MoralCategory) => {
     const random = cat.morals[Math.floor(Math.random() * cat.morals.length)];
+    setRandomMode(cat.name);
     onChange({ category: cat.name, moral: random });
   };
 
   const selectFullyRandom = () => {
     const cat = MORAL_CATEGORIES[Math.floor(Math.random() * MORAL_CATEGORIES.length)];
     const moral = cat.morals[Math.floor(Math.random() * cat.morals.length)];
+    setRandomMode("full");
     onChange({ category: cat.name, moral });
   };
 
@@ -75,6 +79,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
 
   const handleCustomSubmit = () => {
     if (customMoral.trim()) {
+      setRandomMode(null);
       onChange({ category: "Własny morał", moral: customMoral.trim() });
     }
   };
@@ -89,7 +94,9 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
         onClick={selectFullyRandom}
         className={cn(
           "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
-          "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+          randomMode === "full"
+            ? "bg-accent/20 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]"
+            : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
         )}
       >
         <Shuffle className="h-4 w-4" />
@@ -104,14 +111,14 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
               "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
               expandedCategory === cat.name
                 ? "bg-secondary/60 border-accent/40 text-foreground"
-                : value?.category === cat.name
+                : value?.category === cat.name && !randomMode
                 ? "bg-accent/10 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]"
                 : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/30"
             )}
           >
             <span className="text-base">{cat.emoji}</span>
             <span className="flex-1 text-left">{cat.name}</span>
-            {value?.category === cat.name && (
+            {value?.category === cat.name && !randomMode && (
               <span className="text-xs text-accent truncate max-w-[120px]">
                 {value.moral}
               </span>
@@ -136,7 +143,12 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
                 <div className="flex flex-wrap gap-1.5 px-2 py-2">
                   <button
                     onClick={() => selectRandomFromCategory(cat)}
-                    className="px-3 py-1.5 rounded-full text-xs transition-all border bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs transition-all border",
+                      randomMode === cat.name
+                        ? "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]"
+                        : "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                    )}
                   >
                     🎲 Losowy
                   </button>
