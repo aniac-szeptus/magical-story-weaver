@@ -122,7 +122,6 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
           }>
           
             <span className="font-medium">{v.label}</span>
-            </button>
           </button>
         )}
 
