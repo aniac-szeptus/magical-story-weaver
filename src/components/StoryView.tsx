@@ -175,22 +175,45 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
               {topicEmoji[topic] || "✨"} Przygoda w świecie: {topic}
             </p>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleMusic}
-            disabled={isMusicLoading}
-            className={isMusicPlaying ? "text-accent" : "text-foreground/60 hover:text-accent"}
-            title={isMusicPlaying ? "Wycisz muzykę" : "Włącz muzykę"}
-          >
-            {isMusicLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : isMusicPlaying ? (
-              <Music className="h-5 w-5" />
-            ) : (
-              <VolumeX className="h-5 w-5" />
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMusic}
+              onContextMenu={(e) => { e.preventDefault(); setShowVolumeSlider(!showVolumeSlider); }}
+              onDoubleClick={() => setShowVolumeSlider(!showVolumeSlider)}
+              disabled={isMusicLoading}
+              className={isMusicPlaying ? "text-accent" : "text-foreground/60 hover:text-accent"}
+              title={isMusicPlaying ? "Wycisz muzykę (2x klik = głośność)" : "Włącz muzykę"}
+            >
+              {isMusicLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : isMusicPlaying ? (
+                <Music className="h-5 w-5" />
+              ) : (
+                <VolumeX className="h-5 w-5" />
+              )}
+            </Button>
+            {showVolumeSlider && isMusicPlaying && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-full right-0 mt-1 glass-card rounded-xl p-3 flex items-center gap-2 z-30 min-w-[160px]"
+              >
+                <Volume1 className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                <input
+                  type="range"
+                  min="0"
+                  max="0.3"
+                  step="0.01"
+                  value={volume}
+                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                  className="w-full h-1.5 accent-primary cursor-pointer"
+                />
+                <Volume2 className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              </motion.div>
             )}
-          </Button>
+          </div>
           <Button
             variant="ghost"
             size="icon"
