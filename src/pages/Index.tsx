@@ -46,7 +46,7 @@ const Index = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke("generate-story", {
-        body: { name, age, gender, topic, moral, duration },
+        body: { name, age, gender, topic, moral: moralSelection.moral, moral_category: moralSelection.category, duration },
       });
 
       if (error) throw error;
