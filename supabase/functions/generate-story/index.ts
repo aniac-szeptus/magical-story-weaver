@@ -22,7 +22,7 @@ serve(async (req) => {
 
     const wordCount = duration === "2" ? 300 : duration === "5" ? 700 : 1400;
 
-    const systemPrompt = `Jesteś utalentowanym polskim autorem bajek dla dzieci. Piszesz piękne, wciągające bajki w języku polskim. Bajki muszą być odpowiednie dla dzieci i mieć pozytywne przesłanie.
+    const systemPrompt = `Jesteś światowej klasy autorem literatury dziecięcej. Piszesz piękne, wciągające bajki w języku polskim. Bajki muszą być odpowiednie dla dzieci i mieć pozytywne przesłanie.
 
 WAŻNE ZASADY:
 - Pisz TYLKO po polsku
@@ -30,6 +30,8 @@ WAŻNE ZASADY:
 - Temat bajki: ${topic}
 - Morał/przesłanie bajki: ${moral}
 - Bajka ma mieć około ${wordCount} słów (czas czytania: ~${duration} minut)
+- Bezpieczeństwo: Żadnej przemocy, strachu czy treści nieodpowiednich
+- Słownictwo: Dostosuj do wieku ${age}. Np Dla 3-latka używaj prostych zdań i wielu onomatopei (plusk, bam, hura). Dla 7-latka dodaj więcej opisów przyrody i emocji.
 - Używaj poprawnych form gramatycznych dopasowanych do płci bohatera
 - Zakończ bajkę emoji: 🌟 Koniec 🌟
 - Nie dodawaj tytułu na początku
@@ -89,9 +91,9 @@ WAŻNE ZASADY:
     });
   } catch (e) {
     console.error("generate-story error:", e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Nieznany błąd" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Nieznany błąd" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 });
