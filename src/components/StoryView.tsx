@@ -12,6 +12,7 @@ interface StoryViewProps {
   story: string;
   childName: string;
   topic: string;
+  selectedVoice: string;
   onBack: () => void;
   onContinue?: () => void;
   storyMeta?: {
