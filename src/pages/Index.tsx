@@ -65,7 +65,7 @@ const Index = () => {
     setStory(null);
   };
 
-  const isValid = name && age && gender && topic && moral && duration;
+  const isValid = name && age && gender && topic && moralSelection && duration;
 
   if (loading) return <StarLoader />;
   if (story) return <StoryView story={story} childName={name} topic={topic} onBack={handleBack} />;
