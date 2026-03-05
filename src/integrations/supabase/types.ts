@@ -59,6 +59,30 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_preferences: {
+        Row: {
+          cloned_voice_id: string | null
+          id: string
+          selected_voice: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cloned_voice_id?: string | null
+          id?: string
+          selected_voice?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cloned_voice_id?: string | null
+          id?: string
+          selected_voice?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

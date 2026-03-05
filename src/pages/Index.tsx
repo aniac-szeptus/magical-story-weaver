@@ -7,6 +7,7 @@ import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
 import TopicSelector, { type TopicSelection } from "@/components/TopicSelector";
 import MoralSelector, { type MoralSelection } from "@/components/MoralSelector";
+import VoiceSelector from "@/components/VoiceSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -34,6 +35,7 @@ const Index = () => {
   const [topicSelection, setTopicSelection] = useState<TopicSelection | null>(null);
   const [moralSelection, setMoralSelection] = useState<MoralSelection | null>(null);
   const [duration, setDuration] = useState("");
+  const [selectedVoice, setSelectedVoice] = useState("xsSg7GkDPDhaGZpbKOLn");
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
 
@@ -110,6 +112,7 @@ const Index = () => {
       story={story}
       childName={name}
       topic={topicSelection?.topic || ""}
+      selectedVoice={selectedVoice}
       onBack={handleBack}
       onContinue={handleContinue}
       storyMeta={{
@@ -216,6 +219,9 @@ const Index = () => {
               ))}
             </div>
           </div>
+
+          {/* Voice */}
+          <VoiceSelector selectedVoice={selectedVoice} onVoiceChange={setSelectedVoice} />
 
           {/* Submit */}
           <Button variant="magic" size="lg" className="w-full text-base py-6 rounded-xl" onClick={handleGenerate} disabled={!isValid}>
