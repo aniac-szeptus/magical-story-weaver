@@ -12,8 +12,6 @@ interface VoiceSelectorProps {
 const PRESET_VOICES = [
   { id: "xsSg7GkDPDhaGZpbKOLn", label: "👴 Dziadek Julian" },
   { id: "onwK4e9ZLuTAKqWW03F9", label: "👵 Babcia Dobrawka" },
-  { id: "EXAVITQu4vr4xnSDxMaL", label: "🧚 Wróżka Maja" },
-  { id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Ciocia Krysia" },
   { id: "IKne3meq5aSn9XLyUdCD", label: "🌟 Wujek Andrzej" },
 ];
 
