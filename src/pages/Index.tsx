@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const TOPICS = [
   { label: "🚀 Kosmos", value: "kosmos" },
@@ -35,27 +37,6 @@ const DURATIONS = [
   { label: "📚 10 min", value: "10" },
 ];
 
-const getDemoStory = (gender: string) => {
-  const b = gender === "boy";
-  return `Dawno, dawno temu, w galaktyce pełnej iskrzących gwiazd, ${b ? "żył mały astronauta" : "żyła mała astronautka"} imieniem {name}. ${b ? "Miał" : "Miała"} zaledwie {age} lat, ale ${b ? "jego" : "jej"} marzenia były większe niż cały wszechświat.
-
-Pewnego wieczoru, gdy {name} ${b ? "patrzył" : "patrzyła"} przez teleskop, ${b ? "zauważył" : "zauważyła"} migoczącą gwiazdę, która zdawała się do ${b ? "niego" : "niej"} mrugać. "To zaproszenie!" — ${b ? "pomyślał" : "pomyślała"} i ${b ? "wsiadł" : "wsiadła"} do swojego rakietowego statku zbudowanego z kartonowego pudła i marzeń.
-
-Statek wzniósł się wysoko, mijając srebrny księżyc i tańczące komety. Na planecie Lumina {name} ${b ? "spotkał" : "spotkała"} małego kosmitę o wielkich, złotych oczach. "Jestem Ziko" — powiedział kosmita. "Moja planeta traci blask. Potrzebuję kogoś ${b ? "odważnego" : "odważnej"}."
-
-{name} ${b ? "poczuł" : "poczuła"} lekki strach, ale ${b ? "przypomniał" : "przypomniała"} sobie słowa babci: "Odwaga to nie brak strachu, to decyzja, że coś jest ważniejsze." Razem z Ziko wyruszyli w podróż do Jądra Gwiazdy.
-
-Po drodze pokonali wir kosmiczny, rozwiązali zagadkę Sfinksa Mgławicy i przeszli przez most z tęczowego pyłu. Kiedy dotarli do Jądra, {name} ${b ? "zrozumiał" : "zrozumiała"}, że musi podzielić się swoim własnym blaskiem — odwagą, którą ${b ? "niósł" : "niosła"} w sercu.
-
-${b ? "Położył" : "Położyła"} dłoń na krysztale i cała planeta rozbłysła złotym światłem. Ziko uśmiechnął się, a tysiące gwiazd zatańczyły na niebie.
-
-"Dziękuję, {name}" — szepnął Ziko. "${b ? "Nauczyłeś" : "Nauczyłaś"} mnie, że prawdziwa odwaga mieszka w każdym, kto decyduje się pomóc."
-
-{name} ${b ? "wrócił" : "wróciła"} do domu, tuż przed śniadaniem. Nikt nie wiedział o ${b ? "jego" : "jej"} kosmicznej przygodzie — poza jedną mrugającą gwiazdą na niebie, która od tamtej pory świeciła jaśniej niż wszystkie inne.
-
-🌟 Koniec 🌟`;
-};
-
 const Index = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -66,17 +47,25 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!name || !age || !gender || !topic || !moral || !duration) return;
     setLoading(true);
 
-    setTimeout(() => {
-      const personalizedStory = getDemoStory(gender)
-        .replace(/{name}/g, name)
-        .replace(/{age}/g, age);
-      setStory(personalizedStory);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-story", {
+        body: { name, age, gender, topic, moral, duration },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      setStory(data.story);
+    } catch (e: any) {
+      console.error("Story generation error:", e);
+      toast.error(e.message || "Nie udało się wygenerować bajki. Spróbuj ponownie.");
+    } finally {
       setLoading(false);
-    }, 3000);
+    }
   };
 
   const handleBack = () => {
@@ -255,7 +244,7 @@ const Index = () => {
         </motion.div>
 
         <p className="text-xs text-muted-foreground/50 mt-6 text-center">
-          Gotowe do integracji z OpenAI i ElevenLabs
+          Bajki generowane przez AI ✨
         </p>
       </div>
     </div>
