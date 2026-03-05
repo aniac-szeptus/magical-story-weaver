@@ -42,6 +42,26 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
     kosmos: "🚀", dinozaury: "🦕", wróżki: "🧚", piraci: "🏴‍☠️", smoki: "🐉", ocean: "🌊",
   };
 
+  // Generate illustration on mount
+  useEffect(() => {
+    const generateIllustration = async () => {
+      setIsLoadingIllustration(true);
+      try {
+        const excerpt = story.slice(0, 300);
+        const { data, error } = await supabase.functions.invoke("generate-illustration", {
+          body: { topic, childName, storyExcerpt: excerpt },
+        });
+        if (error) throw error;
+        if (data?.imageUrl) setIllustrationUrl(data.imageUrl);
+      } catch (e) {
+        console.error("Illustration error:", e);
+      } finally {
+        setIsLoadingIllustration(false);
+      }
+    };
+    generateIllustration();
+  }, [story, topic, childName]);
+
   const toggleFavorite = async () => {
     if (!user) {
       toast("Zaloguj się, aby dodać do ulubionych", {
