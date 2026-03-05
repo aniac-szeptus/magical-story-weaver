@@ -5,18 +5,10 @@ import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
+import TopicSelector, { type TopicSelection } from "@/components/TopicSelector";
 import MoralSelector, { type MoralSelection } from "@/components/MoralSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
-const TOPICS = [
-  { label: "🚀 Kosmos", value: "kosmos" },
-  { label: "🦕 Dinozaury", value: "dinozaury" },
-  { label: "🧚 Wróżki", value: "wróżki" },
-  { label: "🏴‍☠️ Piraci", value: "piraci" },
-  { label: "🐉 Smoki", value: "smoki" },
-  { label: "🌊 Ocean", value: "ocean" },
-];
 
 
 const GENDERS = [
@@ -34,19 +26,26 @@ const Index = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
-  const [topic, setTopic] = useState("");
+  const [topicSelection, setTopicSelection] = useState<TopicSelection | null>(null);
   const [moralSelection, setMoralSelection] = useState<MoralSelection | null>(null);
   const [duration, setDuration] = useState("");
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
 
   const handleGenerate = async () => {
-    if (!name || !age || !gender || !topic || !moralSelection || !duration) return;
+    if (!name || !age || !gender || !topicSelection || !moralSelection || !duration) return;
     setLoading(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("generate-story", {
-        body: { name, age, gender, topic, moral: moralSelection.moral, moral_category: moralSelection.category, duration },
+        body: {
+          name, age, gender,
+          topic: topicSelection.topic,
+          topic_category: topicSelection.category,
+          moral: moralSelection.moral,
+          moral_category: moralSelection.category,
+          duration,
+        },
       });
 
       if (error) throw error;
@@ -65,10 +64,10 @@ const Index = () => {
     setStory(null);
   };
 
-  const isValid = name && age && gender && topic && moralSelection && duration;
+  const isValid = name && age && gender && topicSelection && moralSelection && duration;
 
   if (loading) return <StarLoader />;
-  if (story) return <StoryView story={story} childName={name} topic={topic} onBack={handleBack} />;
+  if (story) return <StoryView story={story} childName={name} topic={topicSelection?.topic || ""} onBack={handleBack} />;
 
   return (
     <div className="relative min-h-screen flex flex-col">
@@ -161,21 +160,7 @@ const Index = () => {
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">
               Temat bajki
             </label>
-            <div className="flex flex-wrap gap-2">
-              {TOPICS.map((t) => (
-                <button
-                  key={t.value}
-                  onClick={() => setTopic(t.value)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
-                    topic === t.value
-                      ? "bg-primary/20 border-primary text-foreground"
-                      : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
+            <TopicSelector value={topicSelection} onChange={setTopicSelection} />
           </div>
 
           {/* Moral */}
