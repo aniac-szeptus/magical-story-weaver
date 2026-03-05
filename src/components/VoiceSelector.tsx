@@ -181,7 +181,7 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
             }`}
           >
             <span className="font-medium">{v.label}</span>
-            <span className="text-[10px] opacity-70">{v.desc}</span>
+            
           </button>
         ))}
 
