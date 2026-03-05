@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
+import MoralSelector, { type MoralSelection } from "@/components/MoralSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
