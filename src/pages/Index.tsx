@@ -25,8 +25,7 @@ const DURATIONS = [
 const Index = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [topic, setTopic] = useState("");
+  const [topicSelection, setTopicSelection] = useState<TopicSelection | null>(null);
   const [moralSelection, setMoralSelection] = useState<MoralSelection | null>(null);
   const [duration, setDuration] = useState("");
   const [loading, setLoading] = useState(false);
