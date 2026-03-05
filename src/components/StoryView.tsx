@@ -130,7 +130,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
     } finally {
       setIsLoadingAudio(false);
     }
-  }, [story, isPlaying]);
+  }, [story, isPlaying, selectedVoice]);
 
   const paragraphs = story.split("\n\n").filter(Boolean);
 
