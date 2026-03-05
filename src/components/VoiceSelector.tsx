@@ -12,8 +12,8 @@ interface VoiceSelectorProps {
 }
 
 const PRESET_VOICES = [
-  { id: "xsSg7GkDPDhaGZpbKOLn", label: "🎙️ Narrator PL", desc: "Ciepły, narracyjny głos" },
-  { id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Lily", desc: "Kobiecy, ciepły" },
+  { id: "xsSg7GkDPDhaGZpbKOLn", label: "🎙️Dziadek Julian", desc: "Ciepły, narracyjny głos" },
+  { id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Babcia Dobrawka", desc: "Kobiecy, ciepły" },
 ];
 
 const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => {
