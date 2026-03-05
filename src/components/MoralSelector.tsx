@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Pen } from "lucide-react";
+import { ChevronDown, Pen, Shuffle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface MoralSelection {
@@ -18,12 +18,7 @@ const MORAL_CATEGORIES: MoralCategory[] = [
   {
     name: "Dzielny Maluch",
     emoji: "🦁",
-    morals: [
-      "Strach przed ciemnością",
-      "Wizyta u lekarza",
-      "Samodzielne zasypianie",
-      "Pójście do przedszkola",
-    ],
+    morals: ["Strach przed ciemnością", "Wizyta u lekarza", "Samodzielne zasypianie"],
   },
   {
     name: "Emocje i Relacje",
@@ -31,19 +26,15 @@ const MORAL_CATEGORIES: MoralCategory[] = [
     morals: [
       "Dzielenie się",
       "Radzenie sobie ze złością",
-      "Moc słowa Przepraszam",
       "Empatia",
+      "Moc słowa Przepraszam",
+      "Moc słowa Dziękuję",
     ],
   },
   {
-    name: "Nauka i Świat",
-    emoji: "🔬",
-    morals: [
-      "Błędy są okej",
-      "Wytrwałość",
-      "Ciekawość świata",
-      "Higiena cyfrowa (odłożenie ekranu)",
-    ],
+    name: "Wartości",
+    emoji: "⭐",
+    morals: ["Wytrwałość", "Ciekawość", "Uczciwość"],
   },
 ];
 
@@ -64,7 +55,17 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
 
   const selectMoral = (category: string, moral: string) => {
     onChange({ category, moral });
-    setShowCustomInput(false);
+  };
+
+  const selectRandomFromCategory = (cat: MoralCategory) => {
+    const random = cat.morals[Math.floor(Math.random() * cat.morals.length)];
+    onChange({ category: cat.name, moral: random });
+  };
+
+  const selectFullyRandom = () => {
+    const cat = MORAL_CATEGORIES[Math.floor(Math.random() * MORAL_CATEGORIES.length)];
+    const moral = cat.morals[Math.floor(Math.random() * cat.morals.length)];
+    onChange({ category: cat.name, moral });
   };
 
   const handleCustomToggle = () => {
@@ -83,9 +84,20 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
 
   return (
     <div className="space-y-2">
+      {/* Fully random */}
+      <button
+        onClick={selectFullyRandom}
+        className={cn(
+          "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
+          "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+        )}
+      >
+        <Shuffle className="h-4 w-4" />
+        <span>✨ Losowy morał</span>
+      </button>
+
       {MORAL_CATEGORIES.map((cat) => (
         <div key={cat.name} className="rounded-xl overflow-hidden">
-          {/* Category header */}
           <button
             onClick={() => toggleCategory(cat.name)}
             className={cn(
@@ -112,7 +124,6 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
             />
           </button>
 
-          {/* Morals list */}
           <AnimatePresence>
             {expandedCategory === cat.name && (
               <motion.div
@@ -123,6 +134,12 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
                 className="overflow-hidden"
               >
                 <div className="flex flex-wrap gap-1.5 px-2 py-2">
+                  <button
+                    onClick={() => selectRandomFromCategory(cat)}
+                    className="px-3 py-1.5 rounded-full text-xs transition-all border bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                  >
+                    🎲 Losowy
+                  </button>
                   {cat.morals.map((moral) => (
                     <button
                       key={moral}
