@@ -181,23 +181,9 @@ const Index = () => {
           {/* Moral */}
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">
-              Morał
+              Morał / Przesłanie
             </label>
-            <div className="flex flex-wrap gap-2">
-              {MORALS.map((m) => (
-                <button
-                  key={m.value}
-                  onClick={() => setMoral(m.value)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
-                    moral === m.value
-                      ? "bg-accent/20 border-accent text-foreground"
-                      : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50"
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
+            <MoralSelector value={moralSelection} onChange={setMoralSelection} />
           </div>
 
           {/* Duration */}
