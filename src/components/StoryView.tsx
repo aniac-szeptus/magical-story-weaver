@@ -117,6 +117,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       audioUrlRef.current = url;
+      lastVoiceRef.current = selectedVoice;
 
       const audio = new Audio(url);
       audioRef.current = audio;
