@@ -47,6 +47,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [customMoral, setCustomMoral] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const [randomMode, setRandomMode] = useState<"full" | string | null>(null);
 
   const toggleCategory = (name: string) => {
     setExpandedCategory((prev) => (prev === name ? null : name));
@@ -54,17 +55,20 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
   };
 
   const selectMoral = (category: string, moral: string) => {
+    setRandomMode(null);
     onChange({ category, moral });
   };
 
   const selectRandomFromCategory = (cat: MoralCategory) => {
     const random = cat.morals[Math.floor(Math.random() * cat.morals.length)];
+    setRandomMode(cat.name);
     onChange({ category: cat.name, moral: random });
   };
 
   const selectFullyRandom = () => {
     const cat = MORAL_CATEGORIES[Math.floor(Math.random() * MORAL_CATEGORIES.length)];
     const moral = cat.morals[Math.floor(Math.random() * cat.morals.length)];
+    setRandomMode("full");
     onChange({ category: cat.name, moral });
   };
 
