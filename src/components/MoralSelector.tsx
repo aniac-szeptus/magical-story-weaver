@@ -93,7 +93,9 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
         onClick={selectFullyRandom}
         className={cn(
           "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
-          "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+          randomMode === "full"
+            ? "bg-accent/20 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]"
+            : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
         )}
       >
         <Shuffle className="h-4 w-4" />
