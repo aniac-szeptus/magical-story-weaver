@@ -160,21 +160,7 @@ const Index = () => {
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">
               Temat bajki
             </label>
-            <div className="flex flex-wrap gap-2">
-              {TOPICS.map((t) => (
-                <button
-                  key={t.value}
-                  onClick={() => setTopic(t.value)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
-                    topic === t.value
-                      ? "bg-primary/20 border-primary text-foreground"
-                      : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
+            <TopicSelector value={topicSelection} onChange={setTopicSelection} />
           </div>
 
           {/* Moral */}
