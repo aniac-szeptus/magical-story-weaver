@@ -71,17 +71,18 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
     }
   };
 
-  const handleVoiceChange = useCallback((voiceId: string) => {
-    setSelectedVoice(voiceId);
-    // Reset cached audio when voice changes
-    if (lastVoiceRef.current !== voiceId && audioRef.current) {
+  // Reset cached audio when voice changes
+  const prevVoiceRef = useRef(selectedVoice);
+  if (prevVoiceRef.current !== selectedVoice) {
+    prevVoiceRef.current = selectedVoice;
+    if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false);
       if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
       audioRef.current = null;
       audioUrlRef.current = null;
     }
-  }, []);
+  }
 
   const playAudio = useCallback(async () => {
     // If we already have audio loaded with same voice, just toggle play/pause
