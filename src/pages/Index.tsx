@@ -138,6 +138,28 @@ const Index = () => {
             />
           </div>
 
+          {/* Gender */}
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1.5">
+              Płeć
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {GENDERS.map((g) => (
+                <button
+                  key={g.value}
+                  onClick={() => setGender(g.value)}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
+                    gender === g.value
+                      ? "bg-primary/20 border-primary text-foreground"
+                      : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Topic */}
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">
