@@ -5,18 +5,10 @@ import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
+import TopicSelector, { type TopicSelection } from "@/components/TopicSelector";
 import MoralSelector, { type MoralSelection } from "@/components/MoralSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
-const TOPICS = [
-  { label: "🚀 Kosmos", value: "kosmos" },
-  { label: "🦕 Dinozaury", value: "dinozaury" },
-  { label: "🧚 Wróżki", value: "wróżki" },
-  { label: "🏴‍☠️ Piraci", value: "piraci" },
-  { label: "🐉 Smoki", value: "smoki" },
-  { label: "🌊 Ocean", value: "ocean" },
-];
 
 
 const GENDERS = [
