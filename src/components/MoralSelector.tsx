@@ -142,7 +142,12 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
                 <div className="flex flex-wrap gap-1.5 px-2 py-2">
                   <button
                     onClick={() => selectRandomFromCategory(cat)}
-                    className="px-3 py-1.5 rounded-full text-xs transition-all border bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs transition-all border",
+                      randomMode === cat.name
+                        ? "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]"
+                        : "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                    )}
                   >
                     🎲 Losowy
                   </button>
