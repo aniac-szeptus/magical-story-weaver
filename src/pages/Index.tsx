@@ -7,6 +7,7 @@ import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
 import TopicSelector, { type TopicSelection } from "@/components/TopicSelector";
 import MoralSelector, { type MoralSelection } from "@/components/MoralSelector";
+import VoiceSelector from "@/components/VoiceSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
