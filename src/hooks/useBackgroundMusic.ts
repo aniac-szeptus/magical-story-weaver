@@ -35,7 +35,7 @@ export const useBackgroundMusic = (topic: string) => {
 
         const audio = new Audio(url);
         audio.loop = true;
-        audio.volume = 0.15;
+        audio.volume = 0.05;
         musicRef.current = audio;
 
         // Auto-play
