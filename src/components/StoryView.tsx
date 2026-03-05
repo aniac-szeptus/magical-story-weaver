@@ -187,7 +187,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
           <motion.div className="mb-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
             <Button variant="magic" className="w-full rounded-xl py-5" onClick={onContinue}>
               <BookOpen className="mr-2 h-5 w-5" />
-              Wygeneruj ciąg dalszy
+              ✨ Odkryj dalszą część przygody
             </Button>
           </motion.div>
         )}
