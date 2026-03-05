@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Pen, Shuffle } from "lucide-react";
+import { ChevronDown, Pen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface MoralSelection {
@@ -111,7 +111,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
           "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
         )}>
         
-        <Shuffle className="h-4 w-4" />
+        
         <span>✨ Losowy morał</span>
       </button>
 
