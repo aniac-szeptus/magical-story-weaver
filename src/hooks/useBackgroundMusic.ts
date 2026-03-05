@@ -4,6 +4,7 @@ export const useBackgroundMusic = (topic: string) => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isMusicLoading, setIsMusicLoading] = useState(true);
   const [isMusicMuted, setIsMusicMuted] = useState(false);
+  const [volume, setVolumeState] = useState(0.05);
   const musicRef = useRef<HTMLAudioElement | null>(null);
   const musicUrlRef = useRef<string | null>(null);
 
@@ -35,17 +36,15 @@ export const useBackgroundMusic = (topic: string) => {
 
         const audio = new Audio(url);
         audio.loop = true;
-        audio.volume = 0.05;
+        audio.volume = volume;
         musicRef.current = audio;
 
-        // Auto-play
         try {
           await audio.play();
           if (!cancelled) {
             setIsMusicPlaying(true);
           }
         } catch {
-          // Autoplay blocked by browser - that's ok
           console.log("Autoplay blocked, user needs to interact first");
         }
       } catch (e) {
@@ -70,11 +69,18 @@ export const useBackgroundMusic = (topic: string) => {
     };
   }, [topic]);
 
+  const setVolume = useCallback((v: number) => {
+    setVolumeState(v);
+    if (musicRef.current) {
+      musicRef.current.volume = v;
+    }
+  }, []);
+
   const toggleMusic = useCallback(() => {
     if (!musicRef.current) return;
 
     if (isMusicMuted || !isMusicPlaying) {
-      musicRef.current.volume = 0.05;
+      musicRef.current.volume = volume;
       musicRef.current.play().catch(() => {});
       setIsMusicPlaying(true);
       setIsMusicMuted(false);
@@ -83,7 +89,7 @@ export const useBackgroundMusic = (topic: string) => {
       setIsMusicPlaying(false);
       setIsMusicMuted(true);
     }
-  }, [isMusicPlaying, isMusicMuted]);
+  }, [isMusicPlaying, isMusicMuted, volume]);
 
-  return { isMusicPlaying, isMusicLoading, isMusicMuted, toggleMusic };
+  return { isMusicPlaying, isMusicLoading, isMusicMuted, volume, setVolume, toggleMusic };
 };
