@@ -18,20 +18,12 @@ const TOPIC_CATEGORIES: TopicCategory[] = [
   {
     name: "Magiczne Krainy",
     emoji: "✨",
-    topics: [
-      "✨ Losowy",
-      "Wróżki i Elfy 🧚",
-      "Smocza Dolina 🐲",
-      "Szkoła Magii 🪄",
-      "Królestwo Słodyczy 🍭",
-      "Zaczarowany Las 🌳",
-    ],
+    topics: ["Wróżki i Elfy 🧚", "Smocza Dolina 🐲", "Szkoła Magii 🪄", "Królestwo Słodyczy 🍭", "Zaczarowany Las 🌳"],
   },
   {
     name: "Wielka Przygoda",
     emoji: "🚀",
     topics: [
-      "✨ Losowy",
       "Kosmiczna Misja 👨‍🚀",
       "Dino-Świat 🦖",
       "Piraci z Siedmiu Mórz 🏴‍☠️",
@@ -42,7 +34,7 @@ const TOPIC_CATEGORIES: TopicCategory[] = [
   {
     name: "Ciekawscy Odkrywcy",
     emoji: "🔍",
-    topics: ["✨ Losowy", "Wnętrze Komputera 💻", "Mikroświat Owadów 🐜", "Zagadki Przyrody 🌿", "Tajemnice Maszyn ⚙️"],
+    topics: ["Wnętrze Komputera 💻", "Mikroświat Owadów 🐜", "Zagadki Przyrody 🌿", "Tajemnice Maszyn ⚙️"],
   },
 ];
 
