@@ -129,7 +129,6 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
                         : "bg-secondary/40 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
                     )}
                   >
-                  >
                     🎲 Losowy
                   </button>
                   {cat.topics.map((topic) => (
