@@ -17,7 +17,7 @@ interface TopicCategory {
 const TOPIC_CATEGORIES: TopicCategory[] = [
   {
     name: "Magiczne Krainy",
-    emoji: "✨",
+    emoji: "🦄",
     topics: ["Wróżki i Elfy 🧚", "Smocza Dolina 🐲", "Szkoła Magii 🪄", "Królestwo Słodyczy 🍭", "Zaczarowany Las 🌳"],
   },
   {
