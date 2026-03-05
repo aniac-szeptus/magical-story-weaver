@@ -110,7 +110,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
               "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
               expandedCategory === cat.name
                 ? "bg-secondary/60 border-accent/40 text-foreground"
-                : value?.category === cat.name
+                : value?.category === cat.name && !randomMode
                 ? "bg-accent/10 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]"
                 : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/30"
             )}
