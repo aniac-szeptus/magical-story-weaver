@@ -73,7 +73,9 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
         onClick={selectFullyRandom}
         className={cn(
           "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
-          "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+          randomMode === "full"
+            ? "bg-primary/20 border-primary text-foreground shadow-[0_0_12px_-3px_hsl(var(--primary)/0.4)]"
+            : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
         )}
       >
         <Shuffle className="h-4 w-4" />
