@@ -32,8 +32,10 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [savingFav, setSavingFav] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState("xsSg7GkDPDhaGZpbKOLn");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
+  const lastVoiceRef = useRef<string | null>(null);
 
   const topicEmoji: Record<string, string> = {
     kosmos: "🚀", dinozaury: "🦕", wróżki: "🧚", piraci: "🏴‍☠️", smoki: "🐉", ocean: "🌊",
