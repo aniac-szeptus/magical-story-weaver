@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen, ImageIcon } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen, ImageIcon, Music, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import { useAuth } from "@/hooks/useAuth";
