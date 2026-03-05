@@ -117,7 +117,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
           >
             <span className="text-base">{cat.emoji}</span>
             <span className="flex-1 text-left">{cat.name}</span>
-            {value?.category === cat.name && (
+            {value?.category === cat.name && !randomMode && (
               <span className="text-xs text-accent truncate max-w-[120px]">
                 {value.moral}
               </span>
