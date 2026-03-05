@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,6 +32,8 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [savingFav, setSavingFav] = useState(false);
+  const [illustrationUrl, setIllustrationUrl] = useState<string | null>(null);
+  const [isLoadingIllustration, setIsLoadingIllustration] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
   const lastVoiceRef = useRef<string | null>(null);
@@ -39,6 +41,26 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
   const topicEmoji: Record<string, string> = {
     kosmos: "🚀", dinozaury: "🦕", wróżki: "🧚", piraci: "🏴‍☠️", smoki: "🐉", ocean: "🌊",
   };
+
+  // Generate illustration on mount
+  useEffect(() => {
+    const generateIllustration = async () => {
+      setIsLoadingIllustration(true);
+      try {
+        const excerpt = story.slice(0, 300);
+        const { data, error } = await supabase.functions.invoke("generate-illustration", {
+          body: { topic, childName, storyExcerpt: excerpt },
+        });
+        if (error) throw error;
+        if (data?.imageUrl) setIllustrationUrl(data.imageUrl);
+      } catch (e) {
+        console.error("Illustration error:", e);
+      } finally {
+        setIsLoadingIllustration(false);
+      }
+    };
+    generateIllustration();
+  }, [story, topic, childName]);
 
   const toggleFavorite = async () => {
     if (!user) {
@@ -161,19 +183,32 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
           </Button>
         </motion.div>
 
-        {/* Illustration placeholder */}
+        {/* Illustration */}
         <motion.div
           className="w-full aspect-[16/9] rounded-2xl glass-card mb-6 flex items-center justify-center overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="text-center">
-            <motion.div className="text-6xl mb-2" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}>
-              {topicEmoji[topic] || "✨"}
-            </motion.div>
-            <p className="text-xs text-muted-foreground">Ilustracja bajki</p>
-          </div>
+          {isLoadingIllustration ? (
+            <div className="text-center space-y-2">
+              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+              <p className="text-xs text-muted-foreground">Generowanie ilustracji...</p>
+            </div>
+          ) : illustrationUrl ? (
+            <img
+              src={illustrationUrl}
+              alt={`Ilustracja bajki o ${topic}`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="text-center">
+              <motion.div className="text-6xl mb-2" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}>
+                {topicEmoji[topic] || "✨"}
+              </motion.div>
+              <p className="text-xs text-muted-foreground">Ilustracja bajki</p>
+            </div>
+          )}
         </motion.div>
 
         {/* Story text */}
