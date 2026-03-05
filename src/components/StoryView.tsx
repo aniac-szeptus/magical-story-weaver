@@ -183,19 +183,32 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
           </Button>
         </motion.div>
 
-        {/* Illustration placeholder */}
+        {/* Illustration */}
         <motion.div
           className="w-full aspect-[16/9] rounded-2xl glass-card mb-6 flex items-center justify-center overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="text-center">
-            <motion.div className="text-6xl mb-2" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}>
-              {topicEmoji[topic] || "✨"}
-            </motion.div>
-            <p className="text-xs text-muted-foreground">Ilustracja bajki</p>
-          </div>
+          {isLoadingIllustration ? (
+            <div className="text-center space-y-2">
+              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+              <p className="text-xs text-muted-foreground">Generowanie ilustracji...</p>
+            </div>
+          ) : illustrationUrl ? (
+            <img
+              src={illustrationUrl}
+              alt={`Ilustracja bajki o ${topic}`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="text-center">
+              <motion.div className="text-6xl mb-2" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}>
+                {topicEmoji[topic] || "✨"}
+              </motion.div>
+              <p className="text-xs text-muted-foreground">Ilustracja bajki</p>
+            </div>
+          )}
         </motion.div>
 
         {/* Story text */}
