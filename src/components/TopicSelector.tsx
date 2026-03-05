@@ -137,7 +137,7 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
                       onClick={() => selectTopic(cat.name, topic)}
                       className={cn(
                         "px-3 py-1.5 rounded-full text-xs transition-all border",
-                        isSelected(cat.name, topic)
+                        isSelected(cat.name, topic) && !randomMode
                           ? "bg-primary/20 border-primary text-foreground shadow-[0_0_10px_-2px_hsl(var(--primary)/0.5)]"
                           : "bg-secondary/40 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
                       )}

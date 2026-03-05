@@ -158,7 +158,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
                       onClick={() => selectMoral(cat.name, moral)}
                       className={cn(
                         "px-3 py-1.5 rounded-full text-xs transition-all border",
-                        isSelected(cat.name, moral)
+                        isSelected(cat.name, moral) && !randomMode
                           ? "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]"
                           : "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
                       )}
