@@ -79,6 +79,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
 
   const handleCustomSubmit = () => {
     if (customMoral.trim()) {
+      setRandomMode(null);
       onChange({ category: "Własny morał", moral: customMoral.trim() });
     }
   };
