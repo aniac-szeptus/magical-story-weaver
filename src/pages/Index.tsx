@@ -41,7 +41,7 @@ const Index = () => {
   const [story, setStory] = useState<string | null>(null);
 
   const handleGenerate = async () => {
-    if (!name || !age || !gender || !topic || !moral || !duration) return;
+    if (!name || !age || !gender || !topic || !moralSelection || !duration) return;
     setLoading(true);
 
     try {
