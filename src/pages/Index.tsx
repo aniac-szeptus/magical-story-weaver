@@ -24,39 +24,54 @@ const MORALS = [
   { label: "📚 Ciekawość", value: "ciekawość" },
 ];
 
-const DEMO_STORY = `Dawno, dawno temu, w galaktyce pełnej iskrzących gwiazd, żył mały astronauta imieniem {name}. Miał zaledwie {age} lat, ale jego marzenia były większe niż cały wszechświat.
+const GENDERS = [
+  { label: "👧 Dziewczynka", value: "girl" },
+  { label: "👦 Chłopiec", value: "boy" },
+];
 
-Pewnego wieczoru, gdy {name} patrzył przez teleskop, zauważył migoczącą gwiazdę, która zdawała się do niego mrugać. "To zaproszenie!" — pomyślał i wsiadł do swojego rakietowego statku zbudowanego z kartonowego pudła i marzeń.
+const DURATIONS = [
+  { label: "⚡ 2 min", value: "2" },
+  { label: "📖 5 min", value: "5" },
+  { label: "📚 10 min", value: "10" },
+];
 
-Statek wzniósł się wysoko, mijając srebrny księżyc i tańczące komety. Na planecie Lumina {name} spotkał małego kosmitę o wielkich, złotych oczach. "Jestem Ziko" — powiedział kosmita. "Moja planeta traci blask. Potrzebuję kogoś odważnego."
+const getDemoStory = (gender: string) => {
+  const b = gender === "boy";
+  return `Dawno, dawno temu, w galaktyce pełnej iskrzących gwiazd, ${b ? "żył mały astronauta" : "żyła mała astronautka"} imieniem {name}. ${b ? "Miał" : "Miała"} zaledwie {age} lat, ale ${b ? "jego" : "jej"} marzenia były większe niż cały wszechświat.
 
-{name} poczuł lekki strach, ale przypomniał sobie słowa babci: "Odwaga to nie brak strachu, to decyzja, że coś jest ważniejsze." Razem z Ziko wyruszyli w podróż do Jądra Gwiazdy.
+Pewnego wieczoru, gdy {name} ${b ? "patrzył" : "patrzyła"} przez teleskop, ${b ? "zauważył" : "zauważyła"} migoczącą gwiazdę, która zdawała się do ${b ? "niego" : "niej"} mrugać. "To zaproszenie!" — ${b ? "pomyślał" : "pomyślała"} i ${b ? "wsiadł" : "wsiadła"} do swojego rakietowego statku zbudowanego z kartonowego pudła i marzeń.
 
-Po drodze pokonali wir kosmiczny, rozwiązali zagadkę Sfinksa Mgławicy i przeszli przez most z tęczowego pyłu. Kiedy dotarli do Jądra, {name} zrozumiał, że musi podzielić się swoim własnym blaskiem — odwagą, którą niósł w sercu.
+Statek wzniósł się wysoko, mijając srebrny księżyc i tańczące komety. Na planecie Lumina {name} ${b ? "spotkał" : "spotkała"} małego kosmitę o wielkich, złotych oczach. "Jestem Ziko" — powiedział kosmita. "Moja planeta traci blask. Potrzebuję kogoś ${b ? "odważnego" : "odważnej"}."
 
-Położył dłoń na krysztale i cała planeta rozbłysła złotym światłem. Ziko uśmiechnął się, a tysiące gwiazd zatańczyły na niebie.
+{name} ${b ? "poczuł" : "poczuła"} lekki strach, ale ${b ? "przypomniał" : "przypomniała"} sobie słowa babci: "Odwaga to nie brak strachu, to decyzja, że coś jest ważniejsze." Razem z Ziko wyruszyli w podróż do Jądra Gwiazdy.
 
-"Dziękuję, {name}" — szepnął Ziko. "Nauczyłeś mnie, że prawdziwa odwaga mieszka w każdym, kto decyduje się pomóc."
+Po drodze pokonali wir kosmiczny, rozwiązali zagadkę Sfinksa Mgławicy i przeszli przez most z tęczowego pyłu. Kiedy dotarli do Jądra, {name} ${b ? "zrozumiał" : "zrozumiała"}, że musi podzielić się swoim własnym blaskiem — odwagą, którą ${b ? "niósł" : "niosła"} w sercu.
 
-{name} wrócił do domu, tuż przed śniadaniem. Nikt nie wiedział o jego kosmicznej przygodzie — poza jedną mrugającą gwiazdą na niebie, która od tamtej pory świeciła jaśniej niż wszystkie inne.
+${b ? "Położył" : "Położyła"} dłoń na krysztale i cała planeta rozbłysła złotym światłem. Ziko uśmiechnął się, a tysiące gwiazd zatańczyły na niebie.
+
+"Dziękuję, {name}" — szepnął Ziko. "${b ? "Nauczyłeś" : "Nauczyłaś"} mnie, że prawdziwa odwaga mieszka w każdym, kto decyduje się pomóc."
+
+{name} ${b ? "wrócił" : "wróciła"} do domu, tuż przed śniadaniem. Nikt nie wiedział o ${b ? "jego" : "jej"} kosmicznej przygodzie — poza jedną mrugającą gwiazdą na niebie, która od tamtej pory świeciła jaśniej niż wszystkie inne.
 
 🌟 Koniec 🌟`;
+};
 
 const Index = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
   const [topic, setTopic] = useState("");
   const [moral, setMoral] = useState("");
+  const [duration, setDuration] = useState("");
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
 
   const handleGenerate = () => {
-    if (!name || !age || !topic || !moral) return;
+    if (!name || !age || !gender || !topic || !moral || !duration) return;
     setLoading(true);
 
-    // Simulate API call — replace with real OpenAI integration
     setTimeout(() => {
-      const personalizedStory = DEMO_STORY
+      const personalizedStory = getDemoStory(gender)
         .replace(/{name}/g, name)
         .replace(/{age}/g, age);
       setStory(personalizedStory);
@@ -68,7 +83,7 @@ const Index = () => {
     setStory(null);
   };
 
-  const isValid = name && age && topic && moral;
+  const isValid = name && age && gender && topic && moral && duration;
 
   if (loading) return <StarLoader />;
   if (story) return <StoryView story={story} childName={name} topic={topic} onBack={handleBack} />;
@@ -137,6 +152,28 @@ const Index = () => {
             />
           </div>
 
+          {/* Gender */}
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1.5">
+              Płeć
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {GENDERS.map((g) => (
+                <button
+                  key={g.value}
+                  onClick={() => setGender(g.value)}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
+                    gender === g.value
+                      ? "bg-primary/20 border-primary text-foreground"
+                      : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"
+                  }`}
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Topic */}
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">
@@ -176,6 +213,28 @@ const Index = () => {
                   }`}
                 >
                   {m.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Duration */}
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1.5">
+              Czas trwania bajki
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {DURATIONS.map((d) => (
+                <button
+                  key={d.value}
+                  onClick={() => setDuration(d.value)}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
+                    duration === d.value
+                      ? "bg-accent/20 border-accent text-foreground"
+                      : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50"
+                  }`}
+                >
+                  {d.label}
                 </button>
               ))}
             </div>
