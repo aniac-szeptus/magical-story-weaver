@@ -25,6 +25,7 @@ const DURATIONS = [
 const Index = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
   const [topicSelection, setTopicSelection] = useState<TopicSelection | null>(null);
   const [moralSelection, setMoralSelection] = useState<MoralSelection | null>(null);
   const [duration, setDuration] = useState("");
@@ -32,12 +33,19 @@ const Index = () => {
   const [story, setStory] = useState<string | null>(null);
 
   const handleGenerate = async () => {
-    if (!name || !age || !gender || !topic || !moralSelection || !duration) return;
+    if (!name || !age || !gender || !topicSelection || !moralSelection || !duration) return;
     setLoading(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("generate-story", {
-        body: { name, age, gender, topic, moral: moralSelection.moral, moral_category: moralSelection.category, duration },
+        body: {
+          name, age, gender,
+          topic: topicSelection.topic,
+          topic_category: topicSelection.category,
+          moral: moralSelection.moral,
+          moral_category: moralSelection.category,
+          duration,
+        },
       });
 
       if (error) throw error;
@@ -56,10 +64,10 @@ const Index = () => {
     setStory(null);
   };
 
-  const isValid = name && age && gender && topic && moralSelection && duration;
+  const isValid = name && age && gender && topicSelection && moralSelection && duration;
 
   if (loading) return <StarLoader />;
-  if (story) return <StoryView story={story} childName={name} topic={topic} onBack={handleBack} />;
+  if (story) return <StoryView story={story} childName={name} topic={topicSelection?.topic || ""} onBack={handleBack} />;
 
   return (
     <div className="relative min-h-screen flex flex-col">
