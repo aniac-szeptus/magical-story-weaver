@@ -38,7 +38,8 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
   const lastVoiceRef = useRef<string | null>(null);
-  const { isMusicPlaying, isMusicLoading, toggleMusic } = useBackgroundMusic(topic);
+  const { isMusicPlaying, isMusicLoading, volume, setVolume, toggleMusic } = useBackgroundMusic(topic);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   const topicEmoji: Record<string, string> = {
     kosmos: "🚀", dinozaury: "🦕", wróżki: "🧚", piraci: "🏴‍☠️", smoki: "🐉", ocean: "🌊",
