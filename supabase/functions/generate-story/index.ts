@@ -47,10 +47,17 @@ WAŻNE ZASADY:
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          {
-            role: "user",
-            content: `Napisz bajkę dla ${isBoy ? "chłopca" : "dziewczynki"} o imieniu ${name} (${age} lat). Temat: ${topic}. Morał: ${moral}. Długość: około ${wordCount} słów.`,
-          },
+          ...(continuation
+            ? [
+                { role: "assistant", content: continuation },
+                { role: "user", content: `Napisz ciąg dalszy tej bajki. Kontynuuj fabułę, dodaj nowe przygody dla ${name}. Długość: około ${wordCount} słów. Zakończ emoji: 🌟 Koniec 🌟` },
+              ]
+            : [
+                {
+                  role: "user",
+                  content: `Napisz bajkę dla ${isBoy ? "chłopca" : "dziewczynki"} o imieniu ${name} (${age} lat). Temat: ${topic}. Morał: ${moral}. Długość: około ${wordCount} słów.`,
+                },
+              ]),
         ],
       }),
     });
