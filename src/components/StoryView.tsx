@@ -177,6 +177,22 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
           <Button
             variant="ghost"
             size="icon"
+            onClick={toggleMusic}
+            disabled={isMusicLoading}
+            className={isMusicPlaying ? "text-accent" : "text-foreground/60 hover:text-accent"}
+            title={isMusicPlaying ? "Wycisz muzykę" : "Włącz muzykę"}
+          >
+            {isMusicLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : isMusicPlaying ? (
+              <Music className="h-5 w-5" />
+            ) : (
+              <VolumeX className="h-5 w-5" />
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={toggleFavorite}
             disabled={isFavorited || savingFav}
             className={isFavorited ? "text-destructive" : "text-foreground/60 hover:text-destructive"}
