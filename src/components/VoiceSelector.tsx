@@ -1,10 +1,8 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, MicOff, Loader2, User } from "lucide-react";
+import { Mic, MicOff, Check, Loader2, User, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
 
 interface VoiceSelectorProps {
   selectedVoice: string;
@@ -12,71 +10,21 @@ interface VoiceSelectorProps {
 }
 
 const PRESET_VOICES = [
-  { id: "xsSg7GkDPDhaGZpbKOLn", label: "🎙️Dziadek Julian", desc: "Ciepły, narracyjny głos" },
-  { id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Babcia Dobrawka", desc: "Kobiecy, ciepły" },
-  { id: "VdPTnxf60k2xfe8OHclr", label: "✨ Głos 3", desc: "Wujek Andrzej" },
-  { id: "o2xdfKUpc1Bwq7RchZuW", label: "🌟 Głos 4", desc: "Dodatkowy głos" },
-];
+{ id: "xsSg7GkDPDhaGZpbKOLn", label: "🎙️ Narrator PL", desc: "Ciepły, narracyjny głos" },
+{ id: "onwK4e9ZLuTAKqWW03F9", label: "🧔 Daniel", desc: "Męski, spokojny" },
+{ id: "EXAVITQu4vr4xnSDxMaL", label: "👩 Sarah", desc: "Kobiecy, delikatny" },
+{ id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Lily", desc: "Kobiecy, ciepły" },
+{ id: "IKne3meq5aSn9XLyUdCD", label: "🧒 Charlie", desc: "Młody, energiczny" }];
+
 
 const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => {
-  const { user } = useAuth();
   const [isRecording, setIsRecording] = useState(false);
   const [isCloning, setIsCloning] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [clonedVoiceId, setClonedVoiceId] = useState<string | null>(null);
-  const [loadingPrefs, setLoadingPrefs] = useState(true);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Load saved preferences
-  useEffect(() => {
-    if (!user) {
-      setLoadingPrefs(false);
-      return;
-    }
-    const load = async () => {
-      const { data } = await supabase
-        .from("voice_preferences")
-        .select("selected_voice, cloned_voice_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (data) {
-        if (data.cloned_voice_id) setClonedVoiceId(data.cloned_voice_id);
-        onVoiceChange(data.selected_voice);
-      }
-      setLoadingPrefs(false);
-    };
-    load();
-  }, [user]);
-
-  // Save preferences when voice changes
-  const savePreference = useCallback(async (voiceId: string, cloneId?: string | null) => {
-    if (!user) return;
-    const payload: any = {
-      user_id: user.id,
-      selected_voice: voiceId,
-      updated_at: new Date().toISOString(),
-    };
-    if (cloneId !== undefined) payload.cloned_voice_id = cloneId;
-
-    const { data: existing } = await supabase
-      .from("voice_preferences")
-      .select("id")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (existing) {
-      await supabase.from("voice_preferences").update(payload).eq("user_id", user.id);
-    } else {
-      await supabase.from("voice_preferences").insert(payload);
-    }
-  }, [user]);
-
-  const handleVoiceSelect = useCallback((voiceId: string) => {
-    onVoiceChange(voiceId);
-    savePreference(voiceId, clonedVoiceId);
-  }, [onVoiceChange, savePreference, clonedVoiceId]);
 
   const startRecording = useCallback(async () => {
     try {
@@ -103,6 +51,7 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
 
   const stopRecording = useCallback(async () => {
     if (!mediaRecorderRef.current) return;
+
     return new Promise<Blob>((resolve) => {
       mediaRecorderRef.current!.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
@@ -136,9 +85,9 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
           method: "POST",
           headers: {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`
           },
-          body: formData,
+          body: formData
         }
       );
 
@@ -147,7 +96,6 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
       const data = await response.json();
       setClonedVoiceId(data.voice_id);
       onVoiceChange(data.voice_id);
-      savePreference(data.voice_id, data.voice_id);
       toast.success("Głos sklonowany! 🎉");
     } catch (e: any) {
       console.error("Clone error:", e);
@@ -155,49 +103,41 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
     } finally {
       setIsCloning(false);
     }
-  }, [recordingTime, stopRecording, onVoiceChange, savePreference]);
-
-  if (loadingPrefs) {
-    return (
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie ustawień głosu...
-      </div>
-    );
-  }
+  }, [recordingTime, stopRecording, onVoiceChange]);
 
   return (
     <div className="space-y-3">
       <label className="block text-sm font-medium text-foreground/80">🔊 Wybierz głos lektora</label>
 
       <div className="flex flex-wrap gap-2">
-        {PRESET_VOICES.map((v) => (
-          <button
-            key={v.id}
-            onClick={() => handleVoiceSelect(v.id)}
-            className={`px-3 py-2 rounded-xl text-xs transition-all border flex flex-col items-start ${
-              selectedVoice === v.id
-                ? "bg-primary/20 border-primary text-foreground"
-                : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"
-            }`}
-          >
+        {PRESET_VOICES.map((v) =>
+        <button
+          key={v.id}
+          onClick={() => onVoiceChange(v.id)}
+          className={`px-3 py-2 rounded-xl text-xs transition-all border flex flex-col items-start ${
+          selectedVoice === v.id ?
+          "bg-primary/20 border-primary text-foreground" :
+          "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"}`
+          }>
+          
             <span className="font-medium">{v.label}</span>
-            
+            <span className="text-[10px] opacity-70">{v.desc}</span>
           </button>
-        ))}
+        )}
 
-        {clonedVoiceId && (
-          <button
-            onClick={() => handleVoiceSelect(clonedVoiceId)}
-            className={`px-3 py-2 rounded-xl text-xs transition-all border flex flex-col items-start ${
-              selectedVoice === clonedVoiceId
-                ? "bg-primary/20 border-primary text-foreground"
-                : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"
-            }`}
-          >
+        {clonedVoiceId &&
+        <button
+          onClick={() => onVoiceChange(clonedVoiceId)}
+          className={`px-3 py-2 rounded-xl text-xs transition-all border flex flex-col items-start ${
+          selectedVoice === clonedVoiceId ?
+          "bg-primary/20 border-primary text-foreground" :
+          "bg-secondary/30 border-border text-muted-foreground hover:border-primary/50"}`
+          }>
+          
             <span className="font-medium">🎤 Mój głos</span>
             <span className="text-[10px] opacity-70">Sklonowany</span>
           </button>
-        )}
+        }
       </div>
 
       {/* Record own voice */}
@@ -207,46 +147,46 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
         </p>
 
         <AnimatePresence mode="wait">
-          {isCloning ? (
-            <motion.div key="cloning" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-muted-foreground">
+          {isCloning ?
+          <motion.div key="cloning" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
               Klonowanie głosu...
-            </motion.div>
-          ) : isRecording ? (
-            <motion.div key="recording" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2">
+            </motion.div> :
+          isRecording ?
+          <motion.div key="recording" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2">
               <motion.div
-                className="h-3 w-3 rounded-full bg-destructive"
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              />
+              className="h-3 w-3 rounded-full bg-destructive"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1, repeat: Infinity }} />
+            
               <span className="text-xs font-mono text-foreground/80">{recordingTime}s</span>
               <Button
-                variant="magic"
-                size="sm"
-                onClick={handleStopAndClone}
-                className="ml-auto rounded-lg text-xs"
-              >
+              variant="magic"
+              size="sm"
+              onClick={handleStopAndClone}
+              className="ml-auto rounded-lg text-xs">
+              
                 <MicOff className="h-3 w-3 mr-1" />
                 Zatrzymaj i sklonuj
               </Button>
-            </motion.div>
-          ) : (
-            <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            </motion.div> :
+
+          <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={startRecording}
-                className="rounded-lg text-xs"
-              >
+              variant="outline"
+              size="sm"
+              onClick={startRecording}
+              className="rounded-lg text-xs">
+              
                 <Mic className="h-3 w-3 mr-1" />
                 Nagraj głos
               </Button>
             </motion.div>
-          )}
+          }
         </AnimatePresence>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default VoiceSelector;
