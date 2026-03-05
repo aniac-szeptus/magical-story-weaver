@@ -35,7 +35,7 @@ const Index = () => {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [topic, setTopic] = useState("");
-  const [moral, setMoral] = useState("");
+  const [moralSelection, setMoralSelection] = useState<MoralSelection | null>(null);
   const [duration, setDuration] = useState("");
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
