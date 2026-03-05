@@ -112,6 +112,7 @@ const Index = () => {
       story={story}
       childName={name}
       topic={topicSelection?.topic || ""}
+      selectedVoice={selectedVoice}
       onBack={handleBack}
       onContinue={handleContinue}
       storyMeta={{
