@@ -10,11 +10,12 @@ interface VoiceSelectorProps {
 }
 
 const PRESET_VOICES = [
-{ id: "xsSg7GkDPDhaGZpbKOLn", label: "🎙️ Narrator PL", desc: "Ciepły, narracyjny głos" },
-{ id: "onwK4e9ZLuTAKqWW03F9", label: "🧔 Daniel", desc: "Męski, spokojny" },
-{ id: "EXAVITQu4vr4xnSDxMaL", label: "👩 Sarah", desc: "Kobiecy, delikatny" },
-{ id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Lily", desc: "Kobiecy, ciepły" },
-{ id: "IKne3meq5aSn9XLyUdCD", label: "🧒 Charlie", desc: "Młody, energiczny" }];
+  { id: "xsSg7GkDPDhaGZpbKOLn", label: "👴 Dziadek Julian" },
+  { id: "onwK4e9ZLuTAKqWW03F9", label: "👵 Babcia Dobrawka" },
+  { id: "EXAVITQu4vr4xnSDxMaL", label: "🧚 Wróżka Maja" },
+  { id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Ciocia Krysia" },
+  { id: "IKne3meq5aSn9XLyUdCD", label: "🌟 Wujek Andrzej" },
+];
 
 
 const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => {
@@ -121,7 +122,6 @@ const VoiceSelector = ({ selectedVoice, onVoiceChange }: VoiceSelectorProps) => 
           }>
           
             <span className="font-medium">{v.label}</span>
-            <span className="text-[10px] opacity-70">{v.desc}</span>
           </button>
         )}
 
