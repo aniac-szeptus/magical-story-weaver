@@ -25,14 +25,13 @@ interface StoryViewProps {
   };
 }
 
-const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: StoryViewProps) => {
+const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue, storyMeta }: StoryViewProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [savingFav, setSavingFav] = useState(false);
-  const [selectedVoice, setSelectedVoice] = useState("xsSg7GkDPDhaGZpbKOLn");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
   const lastVoiceRef = useRef<string | null>(null);
