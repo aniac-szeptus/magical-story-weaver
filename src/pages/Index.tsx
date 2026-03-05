@@ -45,18 +45,19 @@ Położył dłoń na krysztale i cała planeta rozbłysła złotym światłem. Z
 const Index = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
   const [topic, setTopic] = useState("");
   const [moral, setMoral] = useState("");
+  const [duration, setDuration] = useState("");
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
 
   const handleGenerate = () => {
-    if (!name || !age || !topic || !moral) return;
+    if (!name || !age || !gender || !topic || !moral || !duration) return;
     setLoading(true);
 
-    // Simulate API call — replace with real OpenAI integration
     setTimeout(() => {
-      const personalizedStory = DEMO_STORY
+      const personalizedStory = getDemoStory(gender)
         .replace(/{name}/g, name)
         .replace(/{age}/g, age);
       setStory(personalizedStory);
@@ -68,7 +69,7 @@ const Index = () => {
     setStory(null);
   };
 
-  const isValid = name && age && topic && moral;
+  const isValid = name && age && gender && topic && moral && duration;
 
   if (loading) return <StarLoader />;
   if (story) return <StoryView story={story} childName={name} topic={topic} onBack={handleBack} />;
