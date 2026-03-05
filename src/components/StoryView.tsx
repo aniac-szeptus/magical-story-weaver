@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
