@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import StarLoader from "@/components/StarLoader";
 import StoryView from "@/components/StoryView";
+import MoralSelector, { type MoralSelection } from "@/components/MoralSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -17,14 +18,6 @@ const TOPICS = [
   { label: "🌊 Ocean", value: "ocean" },
 ];
 
-const MORALS = [
-  { label: "💪 Odwaga", value: "odwaga" },
-  { label: "🤝 Dzielenie się", value: "dzielenie się" },
-  { label: "❤️ Przyjaźń", value: "przyjaźń" },
-  { label: "🌟 Wytrwałość", value: "wytrwałość" },
-  { label: "🤗 Życzliwość", value: "życzliwość" },
-  { label: "📚 Ciekawość", value: "ciekawość" },
-];
 
 const GENDERS = [
   { label: "👧 Dziewczynka", value: "girl" },
@@ -42,18 +35,18 @@ const Index = () => {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [topic, setTopic] = useState("");
-  const [moral, setMoral] = useState("");
+  const [moralSelection, setMoralSelection] = useState<MoralSelection | null>(null);
   const [duration, setDuration] = useState("");
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
 
   const handleGenerate = async () => {
-    if (!name || !age || !gender || !topic || !moral || !duration) return;
+    if (!name || !age || !gender || !topic || !moralSelection || !duration) return;
     setLoading(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("generate-story", {
-        body: { name, age, gender, topic, moral, duration },
+        body: { name, age, gender, topic, moral: moralSelection.moral, moral_category: moralSelection.category, duration },
       });
 
       if (error) throw error;
@@ -72,7 +65,7 @@ const Index = () => {
     setStory(null);
   };
 
-  const isValid = name && age && gender && topic && moral && duration;
+  const isValid = name && age && gender && topic && moralSelection && duration;
 
   if (loading) return <StarLoader />;
   if (story) return <StoryView story={story} childName={name} topic={topic} onBack={handleBack} />;
@@ -188,23 +181,9 @@ const Index = () => {
           {/* Moral */}
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">
-              Morał
+              Morał / Przesłanie
             </label>
-            <div className="flex flex-wrap gap-2">
-              {MORALS.map((m) => (
-                <button
-                  key={m.value}
-                  onClick={() => setMoral(m.value)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
-                    moral === m.value
-                      ? "bg-accent/20 border-accent text-foreground"
-                      : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50"
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
+            <MoralSelector value={moralSelection} onChange={setMoralSelection} />
           </div>
 
           {/* Duration */}
