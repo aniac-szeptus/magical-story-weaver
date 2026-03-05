@@ -74,7 +74,7 @@ export const useBackgroundMusic = (topic: string) => {
     if (!musicRef.current) return;
 
     if (isMusicMuted || !isMusicPlaying) {
-      musicRef.current.volume = 0.15;
+      musicRef.current.volume = 0.05;
       musicRef.current.play().catch(() => {});
       setIsMusicPlaying(true);
       setIsMusicMuted(false);
