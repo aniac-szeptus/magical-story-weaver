@@ -198,6 +198,16 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
           </div>
         </motion.div>
 
+        {/* Voice selector */}
+        <motion.div
+          className="mb-4"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <VoiceSelector selectedVoice={selectedVoice} onVoiceChange={handleVoiceChange} />
+        </motion.div>
+
         {/* Continue story button */}
         {onContinue && (
           <motion.div className="mb-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
