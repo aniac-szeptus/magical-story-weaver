@@ -108,7 +108,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ text: story }),
+          body: JSON.stringify({ text: story, voiceId: selectedVoice }),
         }
       );
 
