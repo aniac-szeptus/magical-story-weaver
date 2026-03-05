@@ -39,23 +39,27 @@ interface TopicSelectorProps {
 
 const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [randomMode, setRandomMode] = useState<"full" | string | null>(null);
 
   const toggleCategory = (name: string) => {
     setExpandedCategory((prev) => (prev === name ? null : name));
   };
 
   const selectTopic = (category: string, topic: string) => {
+    setRandomMode(null);
     onChange({ category, topic });
   };
 
   const selectRandomFromCategory = (cat: TopicCategory) => {
     const random = cat.topics[Math.floor(Math.random() * cat.topics.length)];
+    setRandomMode(cat.name);
     onChange({ category: cat.name, topic: random });
   };
 
   const selectFullyRandom = () => {
     const cat = TOPIC_CATEGORIES[Math.floor(Math.random() * TOPIC_CATEGORIES.length)];
     const topic = cat.topics[Math.floor(Math.random() * cat.topics.length)];
+    setRandomMode("full");
     onChange({ category: cat.name, topic });
   };
 
