@@ -204,6 +204,28 @@ const Index = () => {
             </div>
           </div>
 
+          {/* Duration */}
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1.5">
+              Czas trwania bajki
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {DURATIONS.map((d) => (
+                <button
+                  key={d.value}
+                  onClick={() => setDuration(d.value)}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-all border ${
+                    duration === d.value
+                      ? "bg-accent/20 border-accent text-foreground"
+                      : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50"
+                  }`}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Submit */}
           <Button
             variant="magic"
