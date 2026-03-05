@@ -15,28 +15,32 @@ interface MoralCategory {
 }
 
 const MORAL_CATEGORIES: MoralCategory[] = [
-{
-  name: "Dzielny Maluch",
-  emoji: "🦁",
-  morals: ["Strach przed ciemnością", "Wizyta u lekarza", "Samodzielne zasypianie"]
-},
-{
-  name: "Emocje i Relacje",
-  emoji: "💛",
-  morals: [
-  "Dzielenie się",
-  "Radzenie sobie ze złością",
-  "Empatia",
-  "Moc słowa Przepraszam",
-  "Moc słowa Dziękuję"]
-
-},
-{
-  name: "Wartości",
-  emoji: "⭐",
-  morals: ["Wytrwałość", "Ciekawość", "Uczciwość"]
-}];
-
+  {
+    name: "Dzielny Maluch",
+    emoji: "🛡️",
+    morals: [
+      "Strach przed ciemnością 🌙",
+      "Odwaga u lekarza 🩺",
+      "Samodzielne zasypianie 💤",
+      "Pójście do przedszkola 🎒",
+    ],
+  },
+  {
+    name: "Emocje i Relacje",
+    emoji: "❤️",
+    morals: ["Radość z dzielenia się 🤝", "Oswojenie złości 🦖", "Moc słowa Przepraszam 🌸", "Empatia i pomaganie 🫂"],
+  },
+  {
+    name: "Mądre Wartości",
+    emoji: "💎",
+    morals: [
+      "Wytrwałość w działaniu 💪",
+      "Ciekawość świata 🌍",
+      "Uczciwość i prawda 💡",
+      "Higiena cyfrowa (oddech od ekranu) 📵",
+    ],
+  },
+];
 
 interface MoralSelectorProps {
   value: MoralSelection | null;
@@ -64,7 +68,6 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
       }
     }
   };
-
 
   const selectMoral = (category: string, moral: string) => {
     setRandomMode(null);
@@ -96,8 +99,7 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
     }
   };
 
-  const isSelected = (category: string, moral: string) =>
-  value?.category === category && value?.moral === moral;
+  const isSelected = (category: string, moral: string) => value?.category === category && value?.moral === moral;
 
   return (
     <div className="space-y-2">
@@ -106,139 +108,114 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
         onClick={selectFullyRandom}
         className={cn(
           "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
-          randomMode === "full" ?
-          "bg-accent/20 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]" :
-          "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
-        )}>
-        
-        
+          randomMode === "full"
+            ? "bg-accent/20 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]"
+            : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground",
+        )}
+      >
         <span>✨ Losowy morał</span>
       </button>
 
-      {MORAL_CATEGORIES.map((cat) =>
-      <div key={cat.name} className="rounded-xl overflow-hidden">
+      {MORAL_CATEGORIES.map((cat) => (
+        <div key={cat.name} className="rounded-xl overflow-hidden">
           <button
-          onClick={() => toggleCategory(cat.name)}
-          className={cn(
-            "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
-            expandedCategory === cat.name ?
-            "bg-secondary/60 border-accent/40 text-foreground" :
-            value?.category === cat.name && !randomMode ?
-            "bg-accent/10 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]" :
-            "bg-secondary/30 border-border text-muted-foreground hover:border-accent/30"
-          )}>
-          
+            onClick={() => toggleCategory(cat.name)}
+            className={cn(
+              "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
+              expandedCategory === cat.name
+                ? "bg-secondary/60 border-accent/40 text-foreground"
+                : value?.category === cat.name && !randomMode
+                  ? "bg-accent/10 border-accent text-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.4)]"
+                  : "bg-secondary/30 border-border text-muted-foreground hover:border-accent/30",
+            )}
+          >
             <span className="text-base">{cat.emoji}</span>
             <span className="flex-1 text-left">{cat.name}</span>
-            {value?.category === cat.name && !randomMode &&
-          <span className="text-xs text-accent truncate max-w-[120px]">
-                {value.moral}
-              </span>
-          }
+            {value?.category === cat.name && !randomMode && (
+              <span className="text-xs text-accent truncate max-w-[120px]">{value.moral}</span>
+            )}
             <ChevronDown
-            className={cn(
-              "h-4 w-4 transition-transform shrink-0",
-              expandedCategory === cat.name && "rotate-180"
-            )} />
-          
+              className={cn("h-4 w-4 transition-transform shrink-0", expandedCategory === cat.name && "rotate-180")}
+            />
           </button>
 
           <AnimatePresence>
-            {expandedCategory === cat.name &&
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden">
-            
+            {expandedCategory === cat.name && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
                 <div className="flex flex-wrap gap-1.5 px-2 py-2">
                   <button
-                onClick={() => selectRandomFromCategory(cat)}
-                className={cn(
-                  "px-3 py-1.5 rounded-full text-xs transition-all border",
-                  randomMode === cat.name ?
-                  "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]" :
-                  "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
-                )}>
-                
+                    onClick={() => selectRandomFromCategory(cat)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs transition-all border",
+                      randomMode === cat.name
+                        ? "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]"
+                        : "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground",
+                    )}
+                  >
                     🎲 Losowy
                   </button>
-                  {cat.morals.map((moral) =>
-              <button
-                key={moral}
-                onClick={() => selectMoral(cat.name, moral)}
-                className={cn(
-                  "px-3 py-1.5 rounded-full text-xs transition-all border",
-                  isSelected(cat.name, moral) && !randomMode ?
-                  "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]" :
-                  "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
-                )}>
-                
+                  {cat.morals.map((moral) => (
+                    <button
+                      key={moral}
+                      onClick={() => selectMoral(cat.name, moral)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full text-xs transition-all border",
+                        isSelected(cat.name, moral) && !randomMode
+                          ? "bg-accent/20 border-accent text-foreground shadow-[0_0_10px_-2px_hsl(var(--accent)/0.5)]"
+                          : "bg-secondary/40 border-border text-muted-foreground hover:border-accent/50 hover:text-foreground",
+                      )}
+                    >
                       {moral}
                     </button>
-              )}
+                  ))}
                 </div>
               </motion.div>
-          }
+            )}
           </AnimatePresence>
         </div>
-      )}
+      ))}
 
       {/* Custom moral */}
       <div className="rounded-xl overflow-hidden">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
         <AnimatePresence>
-          {showCustomInput &&
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden">
-            
+          {showCustomInput && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
               <div className="px-2 py-2 flex gap-2">
                 <input
-                type="text"
-                value={customMoral}
-                onChange={(e) => setCustomMoral(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleCustomSubmit()}
-                placeholder="Wpisz własny morał..."
-                className="flex-1 rounded-lg bg-secondary/50 border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/50" />
-              
+                  type="text"
+                  value={customMoral}
+                  onChange={(e) => setCustomMoral(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleCustomSubmit()}
+                  placeholder="Wpisz własny morał..."
+                  className="flex-1 rounded-lg bg-secondary/50 border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-accent/50"
+                />
+
                 <button
-                onClick={handleCustomSubmit}
-                disabled={!customMoral.trim()}
-                className="px-3 py-2 rounded-lg text-xs font-medium bg-accent/20 border border-accent text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent/30 transition-colors">
-                
+                  onClick={handleCustomSubmit}
+                  disabled={!customMoral.trim()}
+                  className="px-3 py-2 rounded-lg text-xs font-medium bg-accent/20 border border-accent text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent/30 transition-colors"
+                >
                   OK
                 </button>
               </div>
             </motion.div>
-          }
+          )}
         </AnimatePresence>
       </div>
-    </div>);
-
+    </div>
+  );
 };
 
 export default MoralSelector;
