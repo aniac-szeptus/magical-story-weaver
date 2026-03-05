@@ -18,14 +18,6 @@ const TOPICS = [
   { label: "🌊 Ocean", value: "ocean" },
 ];
 
-const MORALS = [
-  { label: "💪 Odwaga", value: "odwaga" },
-  { label: "🤝 Dzielenie się", value: "dzielenie się" },
-  { label: "❤️ Przyjaźń", value: "przyjaźń" },
-  { label: "🌟 Wytrwałość", value: "wytrwałość" },
-  { label: "🤗 Życzliwość", value: "życzliwość" },
-  { label: "📚 Ciekawość", value: "ciekawość" },
-];
 
 const GENDERS = [
   { label: "👧 Dziewczynka", value: "girl" },
