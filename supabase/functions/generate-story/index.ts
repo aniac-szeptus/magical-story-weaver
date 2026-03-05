@@ -31,7 +31,7 @@ WAŻNE ZASADY:
 - Morał/przesłanie bajki: ${moral}
 - Bajka ma mieć około ${wordCount} słów (czas czytania: ~${duration} minut)
 - Bezpieczeństwo: Żadnej przemocy, strachu czy treści nieodpowiednich
-- Słownictwo: Dostosuj do wieku ${age}. Np Dla 3-latka używaj prostych zdań i wielu onomatopei (plusk, bam, hura). Dla 7-latka dodaj więcej opisów przyrody i emocji.
+- Słownictwo: Dostosuj do wieku ${age}. Np Dla dzieka o ${age} <4 używaj prostych zdań i wielu onomatopei (plusk, bam, hura). Dla dziecka o ${age} >3 dodaj więcej opisów przyrody i emocji.
 - Używaj poprawnych form gramatycznych dopasowanych do płci bohatera
 - Zakończ bajkę emoji: 🌟 Koniec 🌟
 - Nie dodawaj tytułu na początku
