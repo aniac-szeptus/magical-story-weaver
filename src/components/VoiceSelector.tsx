@@ -14,7 +14,7 @@ interface VoiceSelectorProps {
 const PRESET_VOICES = [
   { id: "xsSg7GkDPDhaGZpbKOLn", label: "🎙️Dziadek Julian", desc: "Ciepły, narracyjny głos" },
   { id: "pFZP5JQG7iQjIQuC4Bku", label: "🌸 Babcia Dobrawka", desc: "Kobiecy, ciepły" },
-  { id: "VdPTnxf60k2xfe8OHclr", label: "✨ Głos 3", desc: "Dodatkowy głos" },
+  { id: "VdPTnxf60k2xfe8OHclr", label: "✨ Głos 3", desc: "Wujek Andrzej" },
   { id: "o2xdfKUpc1Bwq7RchZuW", label: "🌟 Głos 4", desc: "Dodatkowy głos" },
 ];
 
