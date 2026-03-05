@@ -42,8 +42,20 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
   const [randomMode, setRandomMode] = useState<"full" | string | null>(null);
 
   const toggleCategory = (name: string) => {
-    setExpandedCategory((prev) => (prev === name ? null : name));
+    if (expandedCategory === name) {
+      setExpandedCategory(null);
+    } else {
+      setExpandedCategory(name);
+      // Auto-select random topic from this category if none selected from it
+      const cat = TOPIC_CATEGORIES.find((c) => c.name === name)!;
+      if (value?.category !== name || randomMode) {
+        const random = cat.topics[Math.floor(Math.random() * cat.topics.length)];
+        setRandomMode(name);
+        onChange({ category: name, topic: random });
+      }
+    }
   };
+
 
   const selectTopic = (category: string, topic: string) => {
     setRandomMode(null);
