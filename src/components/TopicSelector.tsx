@@ -90,7 +90,7 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
               "w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium transition-all rounded-xl border",
               expandedCategory === cat.name
                 ? "bg-secondary/60 border-primary/40 text-foreground"
-                : value?.category === cat.name
+                : value?.category === cat.name && !randomMode
                 ? "bg-primary/10 border-primary text-foreground shadow-[0_0_12px_-3px_hsl(var(--primary)/0.4)]"
                 : "bg-secondary/30 border-border text-muted-foreground hover:border-primary/30"
             )}
