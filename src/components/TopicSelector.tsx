@@ -97,7 +97,7 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
           >
             <span className="text-base">{cat.emoji}</span>
             <span className="flex-1 text-left">{cat.name}</span>
-            {value?.category === cat.name && (
+            {value?.category === cat.name && !randomMode && (
               <span className="text-xs text-primary truncate max-w-[120px]">
                 {value.topic}
               </span>
