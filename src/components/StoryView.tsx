@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
+import VoiceSelector from "@/components/VoiceSelector";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -31,8 +32,10 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [savingFav, setSavingFav] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState("xsSg7GkDPDhaGZpbKOLn");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
+  const lastVoiceRef = useRef<string | null>(null);
 
   const topicEmoji: Record<string, string> = {
     kosmos: "🚀", dinozaury: "🦕", wróżki: "🧚", piraci: "🏴‍☠️", smoki: "🐉", ocean: "🌊",
@@ -69,9 +72,21 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
     }
   };
 
+  const handleVoiceChange = useCallback((voiceId: string) => {
+    setSelectedVoice(voiceId);
+    // Reset cached audio when voice changes
+    if (lastVoiceRef.current !== voiceId && audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      audioRef.current = null;
+      audioUrlRef.current = null;
+    }
+  }, []);
+
   const playAudio = useCallback(async () => {
-    // If we already have audio loaded, just toggle play/pause
-    if (audioRef.current && audioUrlRef.current) {
+    // If we already have audio loaded with same voice, just toggle play/pause
+    if (audioRef.current && audioUrlRef.current && lastVoiceRef.current === selectedVoice) {
       if (isPlaying) {
         audioRef.current.pause();
         setIsPlaying(false);
@@ -93,7 +108,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ text: story }),
+          body: JSON.stringify({ text: story, voiceId: selectedVoice }),
         }
       );
 
@@ -102,6 +117,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       audioUrlRef.current = url;
+      lastVoiceRef.current = selectedVoice;
 
       const audio = new Audio(url);
       audioRef.current = audio;
@@ -114,7 +130,7 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
     } finally {
       setIsLoadingAudio(false);
     }
-  }, [story, isPlaying]);
+  }, [story, isPlaying, selectedVoice]);
 
   const paragraphs = story.split("\n\n").filter(Boolean);
 
@@ -180,6 +196,16 @@ const StoryView = ({ story, childName, topic, onBack, onContinue, storyMeta }: S
               </motion.p>
             ))}
           </div>
+        </motion.div>
+
+        {/* Voice selector */}
+        <motion.div
+          className="mb-4"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <VoiceSelector selectedVoice={selectedVoice} onVoiceChange={handleVoiceChange} />
         </motion.div>
 
         {/* Continue story button */}
