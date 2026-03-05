@@ -220,6 +220,9 @@ const Index = () => {
             </div>
           </div>
 
+          {/* Voice */}
+          <VoiceSelector selectedVoice={selectedVoice} onVoiceChange={setSelectedVoice} />
+
           {/* Submit */}
           <Button variant="magic" size="lg" className="w-full text-base py-6 rounded-xl" onClick={handleGenerate} disabled={!isValid}>
             <Wand2 className="mr-2 h-5 w-5" />
