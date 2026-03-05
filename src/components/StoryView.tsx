@@ -1,12 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen, ImageIcon } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, Heart, Loader2, BookOpen, ImageIcon, Music, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StoryBackground from "@/components/StoryBackground";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 
 interface StoryViewProps {
   story: string;
@@ -37,6 +38,7 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
   const lastVoiceRef = useRef<string | null>(null);
+  const { isMusicPlaying, isMusicLoading, toggleMusic } = useBackgroundMusic(topic);
 
   const topicEmoji: Record<string, string> = {
     kosmos: "🚀", dinozaury: "🦕", wróżki: "🧚", piraci: "🏴‍☠️", smoki: "🐉", ocean: "🌊",
@@ -172,6 +174,22 @@ const StoryView = ({ story, childName, topic, selectedVoice, onBack, onContinue,
               {topicEmoji[topic] || "✨"} Przygoda w świecie: {topic}
             </p>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleMusic}
+            disabled={isMusicLoading}
+            className={isMusicPlaying ? "text-accent" : "text-foreground/60 hover:text-accent"}
+            title={isMusicPlaying ? "Wycisz muzykę" : "Włącz muzykę"}
+          >
+            {isMusicLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : isMusicPlaying ? (
+              <Music className="h-5 w-5" />
+            ) : (
+              <VolumeX className="h-5 w-5" />
+            )}
+          </Button>
           <Button
             variant="ghost"
             size="icon"
