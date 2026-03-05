@@ -56,6 +56,12 @@ const TopicSelector = ({ value, onChange }: TopicSelectorProps) => {
     }
   };
 
+
+  const selectTopic = (category: string, topic: string) => {
+    setRandomMode(null);
+    onChange({ category, topic });
+  };
+
   const selectRandomFromCategory = (cat: TopicCategory) => {
     const random = cat.topics[Math.floor(Math.random() * cat.topics.length)];
     setRandomMode(cat.name);

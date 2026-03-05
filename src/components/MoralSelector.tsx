@@ -65,6 +65,12 @@ const MoralSelector = ({ value, onChange }: MoralSelectorProps) => {
     }
   };
 
+
+  const selectMoral = (category: string, moral: string) => {
+    setRandomMode(null);
+    onChange({ category, moral });
+  };
+
   const selectRandomFromCategory = (cat: MoralCategory) => {
     const random = cat.morals[Math.floor(Math.random() * cat.morals.length)];
     setRandomMode(cat.name);
